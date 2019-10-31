@@ -21,18 +21,18 @@ import java.util.List;
 public class EmployeeController 
 {
     @Autowired
-    private EmployeeRepository employeeDao;
+    private EmployeeRepository employeeRepository;
     
     @GetMapping(path="/", produces = "application/json")
     public ResponseEntity<List<Employee>> getEmployees()
     {
-        return ResponseEntity.ok(employeeDao.getAllEmployees());
+        return ResponseEntity.ok(employeeRepository.findAll());
     }
 
     @GetMapping(path="/{id}", produces = "application/json")
     public ResponseEntity<Employee> getEmployee(@PathVariable("id") Integer id)
     {
-        Employee employee = employeeDao.getEmployee(id);
+        Employee employee = employeeRepository.findById(id);
         if(employee !=null)
             return ResponseEntity.ok(employee);
         else
@@ -43,15 +43,10 @@ public class EmployeeController
     @PostMapping(path= "/", consumes = "application/json", produces = "application/json")
     public ResponseEntity<List<Employee>> addEmployee(@RequestBody Employee employee)
                  throws Exception 
-    {       
-        //Generate resource id
-        Integer id = employeeDao.getAllEmployees().size() + 1;
-        employee.setId(id);
-        
-        //add resource
-        employeeDao.addEmployee(employee);
+    {
+        employeeRepository.save(employee);
 
         //Send location in response
-        return ResponseEntity.ok(employeeDao.getAllEmployees());
+        return ResponseEntity.ok(employeeRepository.findAll());
     }
 }

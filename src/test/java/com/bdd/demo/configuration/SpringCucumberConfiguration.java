@@ -9,11 +9,14 @@ import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+
 import java.util.TimeZone;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = {SpringBootDemoApplication.class},
     loader = SpringBootContextLoader.class)
+@TestPropertySource(locations = "classpath:application-bdd.properties")
 public class SpringCucumberConfiguration {
 
   private static final Logger LOG = LoggerFactory.getLogger(SpringCucumberConfiguration.class);

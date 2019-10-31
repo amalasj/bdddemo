@@ -19,7 +19,7 @@ public class EmployeeStepDef extends IntegrationTest implements En {
         // Common steps
         Then("the HTTP response status code should be {int}", (Integer statusCode) -> {
             Response response = getTestContext().getResponse();
-            Assert.assertEquals(response.getStatusCode(), statusCode.intValue());
+            Assert.assertEquals(statusCode.intValue(), response.getStatusCode());
         });
 
 
@@ -28,6 +28,7 @@ public class EmployeeStepDef extends IntegrationTest implements En {
             executeGet(getUrl);
             Response response = getTestContext().getResponse();
             List<Employee> employees = Arrays.asList(response.as(Employee[].class));
+            employees.forEach(employee -> System.out.println(employee.getFirstName()));
             Assert.assertEquals(3, employees.size());
         });
 
@@ -35,10 +36,8 @@ public class EmployeeStepDef extends IntegrationTest implements En {
 
         When("I make a call to get employee with id {int}",
                 (Integer id) -> {
-                    String getUrl = baseUrl() + "/employees/{id}";
-                    Map<String, String> pathParameters = new HashMap<>();
-                    pathParameters.put("id",String.valueOf(id));
-                    executeGet(getUrl, pathParameters);
+                    String getUrl = baseUrl() + "/employees/"+id;
+                    executeGet(getUrl);
                 });
 
         And("employee first name should be {string} and last name should be {string}",
